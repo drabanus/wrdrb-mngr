@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@daisyui {
+  themes: light, dark, cupcake, corporate, forest, pastel;
+}
+
+:root {
+  --font-scale: 1;
+}
+
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
+html[data-font-size="small"] {
+  --font-scale: 0.875;
+}
+
+html[data-font-size="medium"] {
+  --font-scale: 1;
+}
+
+html[data-font-size="large"] {
+  --font-scale: 1.2;
+}
+
+/* Mobile-first responsive utilities */
+.page-container {
+  @apply max-w-7xl mx-auto p-4;
+}
+
+.card-grid {
+  @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.stat-grid {
+  @apply grid gap-4 grid-cols-2 lg:grid-cols-4;
+}
+
+/* Scanner overlay */
+.scanner-region video {
+  @apply w-full rounded-lg;
+}
+
+/* Contact action buttons */
+.contact-btn {
+  @apply btn btn-circle btn-sm;
+}
+
+/* Table responsive wrapper */
+.table-wrap {
+  @apply overflow-x-auto w-full;
+}

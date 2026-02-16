@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./garderobe.db"
+}
+
+// ─── Authentication & Users ─────────────────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String    @map("password_hash")
+  name         String
+  email        String
+  role         String    // admin, receptionist, laundry, mender
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+  scanEvents   ScanEvent[]
+  todoItems    TodoItem[]
+  emailLogs    EmailLog[]
+}
+
+model Session {
+  id        String   @id
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Children & Parents ─────────────────────────────────────────
+
+model Child {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  birthDate   DateTime
+  gender      String   // girl, boy
+  active      Boolean  @default(true)
+  notes       String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  measurements Measurement[]
+  parents      Parent[]
+  bagAssignments BagAssignment[]
+  clothingAssignments ClothingAssignment[]
+}
+
+model Measurement {
+  id             String   @id @default(cuid())
+  childId        String
+  measuredAt     DateTime @default(now())
+  heightCm       Float?
+  armLengthCm    Float?
+  legLengthCm    Float?
+  headCircCm     Float?
+  bellyCircCm    Float?
+  hipCircCm      Float?
+  clothingSize   String?  // e.g. "128", "134", "140"
+  shoeSize       String?  // e.g. "32", "33"
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+}
+
+model Parent {
+  id        String @id @default(cuid())
+  childId   String
+  name      String
+  phone     String @default("")
+  email     String @default("")
+  relation  String @default("parent") // parent, guardian
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+}
+
+// ─── Inventory: Bags & Clothing ─────────────────────────────────
+
+model Bag {
+  id        String   @id @default(cuid())
+  type      String   // clothing_bag, shoe_bag
+  label     String   // name tag text
+  condition String   @default("good") // good, worn, needs_repair
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+
+  tags           Tag[]
+  bagAssignment  BagAssignment?
+  clothingPieces ClothingPiece[]
+  dispatchEvents DispatchEvent[]
+}
+
+model ClothingPiece {
+  id        String   @id @default(cuid())
+  type      String   // kleid, schuerze, hemd, weste, hose, shorts, suspenders, shoes
+  size      String   // clothing size label
+  color     String   @default("")
+  condition String   @default("good") // good, worn, needs_repair, needs_laundry
+  season    String   @default("all") // all, winter, summer
+  bagId     String?
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bag                Bag?                @relation(fields: [bagId], references: [id])
+  tags               Tag[]
+  clothingAssignment ClothingAssignment?
+  receptionChecks    ReceptionCheck[]
+}
+
+// ─── Assignments ────────────────────────────────────────────────
+
+model BagAssignment {
+  id         String   @id @default(cuid())
+  bagId      String   @unique
+  childId    String
+  assignedAt DateTime @default(now())
+
+  bag   Bag   @relation(fields: [bagId], references: [id], onDelete: Cascade)
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+}
+
+model ClothingAssignment {
+  id              String   @id @default(cuid())
+  clothingPieceId String   @unique
+  childId         String
+  assignedAt      DateTime @default(now())
+  notes           String   @default("")
+
+  clothingPiece ClothingPiece @relation(fields: [clothingPieceId], references: [id], onDelete: Cascade)
+  child         Child         @relation(fields: [childId], references: [id], onDelete: Cascade)
+}
+
+// ─── NFC/QR Tags ────────────────────────────────────────────────
+
+model Tag {
+  id              String   @id @default(cuid())
+  type            String   // nfc, qr
+  code            String   @unique // NFC UID or QR payload e.g. "BAG-0042"
+  linkedToType    String   // bag, clothing_piece
+  linkedToBagId   String?
+  linkedToPieceId String?
+  createdAt       DateTime @default(now())
+
+  bag            Bag?            @relation(fields: [linkedToBagId], references: [id])
+  clothingPiece  ClothingPiece?  @relation(fields: [linkedToPieceId], references: [id])
+  scanEvents     ScanEvent[]
+}
+
+// ─── Dispatch & Reception ───────────────────────────────────────
+
+model Gig {
+  id             String   @id @default(cuid())
+  name           String
+  date           DateTime
+  location       String   @default("")
+  notes          String   @default("")
+  status         String   @default("upcoming") // upcoming, dispatched, completed
+  createdAt      DateTime @default(now())
+
+  dispatchEvents DispatchEvent[]
+}
+
+model DispatchEvent {
+  id        String   @id @default(cuid())
+  gigId     String
+  bagId     String
+  action    String   // dispatch, receive
+  timestamp DateTime @default(now())
+  scannedBy String   @default("")
+  notes     String   @default("")
+
+  gig Gig @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  bag Bag @relation(fields: [bagId], references: [id], onDelete: Cascade)
+}
+
+model ScanEvent {
+  id        String   @id @default(cuid())
+  tagId     String
+  userId    String
+  action    String   // dispatch, receive, inventory_check
+  timestamp DateTime @default(now())
+  notes     String   @default("")
+
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ReceptionCheck {
+  id              String   @id @default(cuid())
+  clothingPieceId String
+  gigId           String
+  needsLaundry    Boolean  @default(false)
+  needsRepair     Boolean  @default(false)
+  repairNotes     String   @default("")
+  checkedAt       DateTime @default(now())
+  checkedBy       String   @default("")
+
+  clothingPiece ClothingPiece @relation(fields: [clothingPieceId], references: [id], onDelete: Cascade)
+}
+
+// ─── To-Do & Reminders ──────────────────────────────────────────
+
+model TodoItem {
+  id          String   @id @default(cuid())
+  type        String   // laundry, repair, return_reminder, size_change, custom
+  title       String
+  description String   @default("")
+  priority    String   @default("normal") // low, normal, high, urgent
+  status      String   @default("open")   // open, in_progress, done
+  assignedTo  String?
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignedUser User? @relation(fields: [assignedTo], references: [id])
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  body      String
+  status    String   @default("sent") // sent, failed
+  sentAt    DateTime @default(now())
+  sentBy    String?
+
+  user User? @relation(fields: [sentBy], references: [id])
+}
+
+// ─── App Settings ───────────────────────────────────────────────
+
+model AppSettings {
+  id         String @id @default("global")
+  smtpHost   String @default("")
+  smtpPort   Int    @default(587)
+  smtpUser   String @default("")
+  smtpPass   String @default("")
+  smtpFrom   String @default("")
+  orgName    String @default("Hasenschule")
+}
