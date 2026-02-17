@@ -223,10 +223,7 @@
 					<div class="min-h-20 border-t border-r border-base-300 bg-base-200/30"></div>
 				{:else}
 					<div
-						class="min-h-20 border-t border-r border-base-300 p-1 transition-colors"
-						class:bg-primary/5={isToday}
-						class:cursor-pointer={hasGigs}
-						class:hover:bg-base-200={hasGigs}
+						class="min-h-20 border-t border-r border-base-300 p-1 transition-colors {isToday ? 'bg-primary/5' : ''} {hasGigs ? 'cursor-pointer hover:bg-base-200' : ''}"
 						onclick={() => { if (hasGigs) openDayDetail(cell.dateStr); }}
 						onkeydown={(e) => { if (e.key === 'Enter' && hasGigs) openDayDetail(cell.dateStr); }}
 						role={hasGigs ? 'button' : undefined}
