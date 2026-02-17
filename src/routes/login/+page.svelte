@@ -19,7 +19,7 @@
 				</div>
 			{/if}
 
-			<form method="POST" action="{base}/login" use:enhance>
+			<form method="POST" action="{base}/login?/login" use:enhance>
 				<div class="form-control mb-3">
 					<label class="label" for="username">
 						<span class="label-text">Username</span>
