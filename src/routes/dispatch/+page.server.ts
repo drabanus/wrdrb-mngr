@@ -1,6 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
+import { requireRole } from '$lib/server/roles';
 
 export const load: PageServerLoad = async () => {
 	const [gigs, bags] = await Promise.all([
@@ -25,7 +26,8 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	createGig: async ({ request }) => {
+	createGig: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const name = data.get('name') as string;
 		const date = data.get('date') as string;
@@ -76,7 +78,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	deleteGig: async ({ request }) => {
+	deleteGig: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		if (!id) return fail(400, { error: 'ID required' });

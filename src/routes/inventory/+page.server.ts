@@ -1,6 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
+import { requireRole } from '$lib/server/roles';
 
 export const load: PageServerLoad = async () => {
 	const [bags, clothingPieces, children, allBags] = await Promise.all([
@@ -34,7 +35,8 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	createBag: async ({ request }) => {
+	createBag: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const type = data.get('type') as string;
 		const label = data.get('label') as string;
@@ -52,7 +54,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	updateBag: async ({ request }) => {
+	updateBag: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin', 'laundry', 'mender');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const type = data.get('type') as string;
@@ -72,7 +75,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	deleteBag: async ({ request }) => {
+	deleteBag: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 
@@ -85,7 +89,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	createClothing: async ({ request }) => {
+	createClothing: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const type = data.get('type') as string;
 		const size = data.get('size') as string;
@@ -114,7 +119,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	updateClothing: async ({ request }) => {
+	updateClothing: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin', 'laundry', 'mender');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const type = data.get('type') as string;
@@ -145,7 +151,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	deleteClothing: async ({ request }) => {
+	deleteClothing: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 

@@ -1,6 +1,7 @@
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
+import { requireRole } from '$lib/server/roles';
 
 export const load: PageServerLoad = async () => {
 	const children = await prisma.child.findMany({
@@ -23,7 +24,8 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	create: async ({ request }) => {
+	create: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const firstName = data.get('firstName') as string;
 		const lastName = data.get('lastName') as string;
@@ -46,7 +48,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	update: async ({ request }) => {
+	update: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const firstName = data.get('firstName') as string;
@@ -75,7 +78,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 
@@ -88,7 +92,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	addMeasurement: async ({ request }) => {
+	addMeasurement: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const childId = data.get('childId') as string;
 
@@ -119,7 +124,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	addParent: async ({ request }) => {
+	addParent: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const childId = data.get('childId') as string;
 		const name = data.get('name') as string;
@@ -144,7 +150,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	deleteParent: async ({ request }) => {
+	deleteParent: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 

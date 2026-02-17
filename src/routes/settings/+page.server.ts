@@ -2,6 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
 import nodemailer from 'nodemailer';
+import { requireRole } from '$lib/server/roles';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	let appSettings = await prisma.appSettings.findFirst({
@@ -36,7 +37,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	saveEmail: async ({ request }) => {
+	saveEmail: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const smtpHost = (data.get('smtpHost') as string) || '';
 		const smtpPort = parseInt(data.get('smtpPort') as string) || 587;
@@ -74,6 +76,7 @@ export const actions: Actions = {
 	},
 
 	testEmail: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const smtpHost = (data.get('smtpHost') as string) || '';
 		const smtpPort = parseInt(data.get('smtpPort') as string) || 587;

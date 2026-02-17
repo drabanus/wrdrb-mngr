@@ -1,6 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
+import { requireRole, hasRole } from '$lib/server/roles';
 
 const PRIORITY_ORDER: Record<string, number> = {
 	urgent: 0,
@@ -46,7 +47,8 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	create: async ({ request }) => {
+	create: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin', 'receptionist');
 		const data = await request.formData();
 		const type = data.get('type') as string;
 		const title = data.get('title') as string;
@@ -75,7 +77,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	update: async ({ request }) => {
+	update: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin', 'receptionist');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const type = data.get('type') as string;
@@ -108,13 +111,22 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	updateStatus: async ({ request }) => {
+	updateStatus: async ({ request, locals }) => {
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const status = data.get('status') as string;
 
 		if (!id || !status) {
 			return fail(400, { error: 'ID and status are required' });
+		}
+
+		// Admin and receptionist can update any task's status.
+		// Laundry and mender can only update tasks assigned to them.
+		if (hasRole(locals.user?.role, 'laundry', 'mender')) {
+			const todo = await prisma.todoItem.findUnique({ where: { id } });
+			if (!todo || todo.assignedTo !== locals.user?.id) {
+				return fail(403, { error: 'You can only update tasks assigned to you' });
+			}
 		}
 
 		await prisma.todoItem.update({
@@ -125,7 +137,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin', 'receptionist');
 		const data = await request.formData();
 		const id = data.get('id') as string;
 

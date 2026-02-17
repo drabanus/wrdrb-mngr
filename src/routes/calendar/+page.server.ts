@@ -2,6 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
 import { sendGigReminders } from '$lib/server/email';
+import { requireRole } from '$lib/server/roles';
 
 export const load: PageServerLoad = async () => {
 	const gigs = await prisma.gig.findMany({
@@ -11,7 +12,8 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	createGig: async ({ request }) => {
+	createGig: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const name = data.get('name') as string;
 		const date = data.get('date') as string;
@@ -27,6 +29,7 @@ export const actions: Actions = {
 	},
 
 	sendReminders: async ({ request, locals }) => {
+		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const gigId = data.get('gigId') as string;
 
