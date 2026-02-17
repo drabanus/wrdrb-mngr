@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Scrypt } from 'oslo/password';
+import { lookupClothingByDe, lookupShoeByEu } from '../src/lib/utils/sizes';
 
 const prisma = new PrismaClient();
 const scrypt = new Scrypt();
@@ -143,8 +144,13 @@ async function main() {
 				headCircCm: Math.round(45 + ageYears * 0.8),
 				bellyCircCm: Math.round(40 + ageYears * 2.5),
 				hipCircCm: Math.round(42 + ageYears * 2.3),
-				clothingSize: size,
-				shoeSize: String(Math.round(16 + ageYears * 1.5))
+				clothingSizeDe: size,
+				clothingSizeEu: lookupClothingByDe(size)?.eu ?? size,
+				clothingSizeUs: lookupClothingByDe(size)?.us ?? '',
+				clothingSizeUk: lookupClothingByDe(size)?.uk ?? '',
+				shoeSizeEu: String(Math.round(16 + ageYears * 1.5)),
+				shoeSizeUs: lookupShoeByEu(String(Math.round(16 + ageYears * 1.5)))?.us ?? '',
+				shoeSizeUk: lookupShoeByEu(String(Math.round(16 + ageYears * 1.5)))?.uk ?? ""
 			}
 		});
 
@@ -159,8 +165,13 @@ async function main() {
 				headCircCm: Math.round(45 + ageYears * 0.8 + 0.3),
 				bellyCircCm: Math.round(40 + ageYears * 2.5 + 1),
 				hipCircCm: Math.round(42 + ageYears * 2.3 + 1),
-				clothingSize: size,
-				shoeSize: String(Math.round(16 + ageYears * 1.5))
+				clothingSizeDe: size,
+				clothingSizeEu: lookupClothingByDe(size)?.eu ?? size,
+				clothingSizeUs: lookupClothingByDe(size)?.us ?? '',
+				clothingSizeUk: lookupClothingByDe(size)?.uk ?? '',
+				shoeSizeEu: String(Math.round(16 + ageYears * 1.5)),
+				shoeSizeUs: lookupShoeByEu(String(Math.round(16 + ageYears * 1.5)))?.us ?? '',
+				shoeSizeUk: lookupShoeByEu(String(Math.round(16 + ageYears * 1.5)))?.uk ?? ""
 			}
 		});
 	}
@@ -192,47 +203,47 @@ async function main() {
 			where: { childId: child.id },
 			orderBy: { measuredAt: 'desc' }
 		});
-		const size = measurement?.clothingSize || '128';
+		const size = measurement?.clothingSizeDe || '128';
 
 		// Create clothing pieces
 		if (isGirl) {
 			const kleid = await prisma.clothingPiece.create({
-				data: { type: 'kleid', size, bagId: clothingBag.id, season: 'all' }
+				data: { type: 'kleid', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'all' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: kleid.id, childId: child.id }
 			});
 
 			const schuerze = await prisma.clothingPiece.create({
-				data: { type: 'schuerze', size, bagId: clothingBag.id, season: 'all' }
+				data: { type: 'schuerze', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'all' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: schuerze.id, childId: child.id }
 			});
 		} else {
 			const hemd = await prisma.clothingPiece.create({
-				data: { type: 'hemd', size, bagId: clothingBag.id, season: 'all' }
+				data: { type: 'hemd', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'all' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: hemd.id, childId: child.id }
 			});
 
 			const weste = await prisma.clothingPiece.create({
-				data: { type: 'weste', size, bagId: clothingBag.id, season: 'all' }
+				data: { type: 'weste', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'all' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: weste.id, childId: child.id }
 			});
 
 			const hose = await prisma.clothingPiece.create({
-				data: { type: 'hose', size, bagId: clothingBag.id, season: 'winter' }
+				data: { type: 'hose', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'winter' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: hose.id, childId: child.id }
 			});
 
 			const shorts = await prisma.clothingPiece.create({
-				data: { type: 'shorts', size, bagId: clothingBag.id, season: 'summer' }
+				data: { type: 'shorts', sizeDe: size, sizeEu: size, sizeUs: lookupClothingByDe(size)?.us ?? '', sizeUk: lookupClothingByDe(size)?.uk ?? '', bagId: clothingBag.id, season: 'summer' }
 			});
 			await prisma.clothingAssignment.create({
 				data: { clothingPieceId: shorts.id, childId: child.id }
@@ -240,10 +251,14 @@ async function main() {
 		}
 
 		// Shoes in shoe bag
+		const shoeEu = measurement?.shoeSizeEu || '30';
 		const shoes = await prisma.clothingPiece.create({
 			data: {
 				type: 'shoes',
-				size: measurement?.shoeSize || '30',
+				sizeDe: shoeEu,
+				sizeEu: shoeEu,
+				sizeUs: lookupShoeByEu(shoeEu)?.us ?? '',
+				sizeUk: lookupShoeByEu(shoeEu)?.uk ?? '',
 				bagId: shoeBag.id,
 				season: 'all'
 			}

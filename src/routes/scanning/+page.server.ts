@@ -29,7 +29,7 @@ export const load: PageServerLoad = async () => {
 		}),
 		prisma.clothingPiece.findMany({
 			orderBy: { type: 'asc' },
-			select: { id: true, type: true, size: true, color: true }
+			select: { id: true, type: true, sizeDe: true, sizeEu: true, color: true }
 		})
 	]);
 

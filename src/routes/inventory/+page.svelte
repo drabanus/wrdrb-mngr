@@ -49,7 +49,8 @@
 			const matchesSearch =
 				!searchText ||
 				piece.color?.toLowerCase().includes(searchText.toLowerCase()) ||
-				piece.size?.toLowerCase().includes(searchText.toLowerCase()) ||
+				(piece.sizeDe || '').toLowerCase().includes(searchText.toLowerCase()) ||
+				(piece.sizeEu || '').toLowerCase().includes(searchText.toLowerCase()) ||
 				piece.notes?.toLowerCase().includes(searchText.toLowerCase());
 			const matchesType = !filterType || piece.type === filterType;
 			const matchesCondition = !filterCondition || piece.condition === filterCondition;
@@ -294,7 +295,7 @@
 								<td>
 									<span class="font-medium">{$t(`inventory.clothingTypes.${piece.type}`)}</span>
 								</td>
-								<td>{piece.size}</td>
+								<td>{piece.sizeDe || piece.sizeEu || '-'}</td>
 								<td>{piece.color || '-'}</td>
 								<td>
 									<span class="badge badge-sm {conditionClass(piece.condition)}">
@@ -465,16 +466,54 @@
 					</div>
 
 					<div class="form-control">
-						<label class="label" for="clothing-size">
-							<span class="label-text">{$t('inventory.size')}</span>
+						<label class="label" for="clothing-sizeDe">
+							<span class="label-text">{$t('inventory.sizeDe')}</span>
 						</label>
 						<input
-							id="clothing-size"
+							id="clothing-sizeDe"
 							type="text"
-							name="size"
+							name="sizeDe"
 							class="input input-bordered"
-							value={editingClothing?.size ?? ''}
-							required
+							value={editingClothing?.sizeDe ?? ''}
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="clothing-sizeEu">
+							<span class="label-text">{$t('inventory.sizeEu')}</span>
+						</label>
+						<input
+							id="clothing-sizeEu"
+							type="text"
+							name="sizeEu"
+							class="input input-bordered"
+							value={editingClothing?.sizeEu ?? ''}
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="clothing-sizeUs">
+							<span class="label-text">{$t('inventory.sizeUs')}</span>
+						</label>
+						<input
+							id="clothing-sizeUs"
+							type="text"
+							name="sizeUs"
+							class="input input-bordered"
+							value={editingClothing?.sizeUs ?? ''}
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="clothing-sizeUk">
+							<span class="label-text">{$t('inventory.sizeUk')}</span>
+						</label>
+						<input
+							id="clothing-sizeUk"
+							type="text"
+							name="sizeUk"
+							class="input input-bordered"
+							value={editingClothing?.sizeUk ?? ''}
 						/>
 					</div>
 

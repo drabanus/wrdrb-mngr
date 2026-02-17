@@ -60,8 +60,13 @@ model Measurement {
   headCircCm     Float?
   bellyCircCm    Float?
   hipCircCm      Float?
-  clothingSize   String?  // e.g. "128", "134", "140"
-  shoeSize       String?  // e.g. "32", "33"
+  clothingSizeDe String?  // German size (= body height, e.g. "128")
+  clothingSizeEu String?  // EU size (same as DE for children)
+  clothingSizeUs String?  // US size (e.g. "8")
+  clothingSizeUk String?  // UK size (e.g. "8-9Y")
+  shoeSizeEu     String?  // EU shoe size (e.g. "32")
+  shoeSizeUs     String?  // US shoe size (e.g. "1Y")
+  shoeSizeUk     String?  // UK shoe size (e.g. "13")
 
   child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
 }
@@ -96,7 +101,10 @@ model Bag {
 model ClothingPiece {
   id        String   @id @default(cuid())
   type      String   // kleid, schuerze, hemd, weste, hose, shorts, suspenders, shoes
-  size      String   // clothing size label
+  sizeDe    String   @default("") // German/EU height-based size for clothing
+  sizeEu    String   @default("") // EU size (= DE for clothing; EU number for shoes)
+  sizeUs    String   @default("") // US size
+  sizeUk    String   @default("") // UK size
   color     String   @default("")
   condition String   @default("good") // good, worn, needs_repair, needs_laundry
   season    String   @default("all") // all, winter, summer

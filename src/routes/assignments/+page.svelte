@@ -90,7 +90,8 @@
 			const search = clothingSearch.toLowerCase();
 			return (
 				piece.type.toLowerCase().includes(search) ||
-				piece.size.toLowerCase().includes(search) ||
+				(piece.sizeDe || '').toLowerCase().includes(search) ||
+				(piece.sizeEu || '').toLowerCase().includes(search) ||
 				(piece.color && piece.color.toLowerCase().includes(search))
 			);
 		})
@@ -229,7 +230,7 @@
 														{$t(`inventory.clothingTypes.${assignment.clothingPiece.type}`)}
 													</span>
 													<span class="badge badge-outline badge-xs">
-														{$t('inventory.size')}: {assignment.clothingPiece.size}
+														{$t('inventory.size')}: {assignment.clothingPiece.sizeDe || assignment.clothingPiece.sizeEu || '-'}
 													</span>
 													{#if assignment.clothingPiece.color}
 														<span class="badge badge-outline badge-xs">
@@ -365,7 +366,7 @@
 										{$t(`inventory.clothingTypes.${piece.type}`)}
 									</span>
 									<span class="badge badge-outline badge-xs">
-										{$t('inventory.size')}: {piece.size}
+										{$t('inventory.size')}: {piece.sizeDe || piece.sizeEu || '-'}
 									</span>
 									{#if piece.color}
 										<span class="badge badge-outline badge-xs">{piece.color}</span>

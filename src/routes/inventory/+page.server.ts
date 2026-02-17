@@ -93,21 +93,27 @@ export const actions: Actions = {
 		requireRole(locals.user?.role, 'admin');
 		const data = await request.formData();
 		const type = data.get('type') as string;
-		const size = data.get('size') as string;
+		const sizeDe = (data.get('sizeDe') as string) || '';
+		const sizeEu = (data.get('sizeEu') as string) || '';
+		const sizeUs = (data.get('sizeUs') as string) || '';
+		const sizeUk = (data.get('sizeUk') as string) || '';
 		const color = (data.get('color') as string) || '';
 		const condition = data.get('condition') as string;
 		const season = data.get('season') as string;
 		const bagId = (data.get('bagId') as string) || null;
 		const notes = (data.get('notes') as string) || '';
 
-		if (!type || !size) {
-			return fail(400, { error: 'Type and size are required' });
+		if (!type || (!sizeDe && !sizeEu && !sizeUs && !sizeUk)) {
+			return fail(400, { error: 'Type and at least one size are required' });
 		}
 
 		await prisma.clothingPiece.create({
 			data: {
 				type,
-				size,
+				sizeDe,
+				sizeEu,
+				sizeUs,
+				sizeUk,
 				color,
 				condition: condition || 'good',
 				season: season || 'all',
@@ -124,22 +130,28 @@ export const actions: Actions = {
 		const data = await request.formData();
 		const id = data.get('id') as string;
 		const type = data.get('type') as string;
-		const size = data.get('size') as string;
+		const sizeDe = (data.get('sizeDe') as string) || '';
+		const sizeEu = (data.get('sizeEu') as string) || '';
+		const sizeUs = (data.get('sizeUs') as string) || '';
+		const sizeUk = (data.get('sizeUk') as string) || '';
 		const color = (data.get('color') as string) || '';
 		const condition = data.get('condition') as string;
 		const season = data.get('season') as string;
 		const bagId = (data.get('bagId') as string) || null;
 		const notes = (data.get('notes') as string) || '';
 
-		if (!id || !type || !size) {
-			return fail(400, { error: 'ID, type, and size are required' });
+		if (!id || !type || (!sizeDe && !sizeEu && !sizeUs && !sizeUk)) {
+			return fail(400, { error: 'ID, type, and at least one size are required' });
 		}
 
 		await prisma.clothingPiece.update({
 			where: { id },
 			data: {
 				type,
-				size,
+				sizeDe,
+				sizeEu,
+				sizeUs,
+				sizeUk,
 				color,
 				condition,
 				season,

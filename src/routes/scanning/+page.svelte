@@ -189,7 +189,7 @@
 			return `${tag.bag.label} (${tag.bag.type})`;
 		}
 		if (tag.linkedToType === 'clothing_piece' && tag.clothingPiece) {
-			return `${tag.clothingPiece.type} - ${tag.clothingPiece.size} ${tag.clothingPiece.color}`;
+			return `${tag.clothingPiece.type} - ${tag.clothingPiece.sizeDe || tag.clothingPiece.sizeEu || ''} ${tag.clothingPiece.color}`;
 		}
 		return 'Unknown';
 	}
@@ -457,7 +457,7 @@
 							>
 								<option value="">-- Select --</option>
 								{#each data.clothingPieces as piece}
-									<option value={piece.id}>{piece.type} - {piece.size} {piece.color}</option>
+									<option value={piece.id}>{piece.type} - {piece.sizeDe || piece.sizeEu || ''} {piece.color}</option>
 								{/each}
 							</select>
 						</div>

@@ -185,9 +185,9 @@
 							<span class="badge badge-outline badge-sm">
 								{getAge(child.birthDate)} {$t('children.years')}
 							</span>
-							{#if latestMeasurement?.clothingSize}
+							{#if latestMeasurement?.clothingSizeDe}
 								<span class="badge badge-outline badge-sm">
-									{$t('children.clothingSize')}: {latestMeasurement.clothingSize}
+									{$t('children.clothingSize')}: {latestMeasurement.clothingSizeDe}
 								</span>
 							{/if}
 						</div>
@@ -499,16 +499,28 @@
 									<div class="font-medium">{latest.hipCircCm}</div>
 								</div>
 							{/if}
-							{#if latest.clothingSize}
+							{#if latest.clothingSizeDe}
 								<div class="bg-base-200 rounded-lg p-2">
-									<div class="opacity-60 text-xs">{$t('children.clothingSize')}</div>
-									<div class="font-medium">{latest.clothingSize}</div>
+									<div class="opacity-60 text-xs">{$t('children.clothingSizeDe')}</div>
+									<div class="font-medium">{latest.clothingSizeDe}</div>
 								</div>
 							{/if}
-							{#if latest.shoeSize}
+							{#if latest.clothingSizeUs}
 								<div class="bg-base-200 rounded-lg p-2">
-									<div class="opacity-60 text-xs">{$t('children.shoeSize')}</div>
-									<div class="font-medium">{latest.shoeSize}</div>
+									<div class="opacity-60 text-xs">{$t('children.clothingSizeUs')}</div>
+									<div class="font-medium">{latest.clothingSizeUs}</div>
+								</div>
+							{/if}
+							{#if latest.shoeSizeEu}
+								<div class="bg-base-200 rounded-lg p-2">
+									<div class="opacity-60 text-xs">{$t('children.shoeSizeEu')}</div>
+									<div class="font-medium">{latest.shoeSizeEu}</div>
+								</div>
+							{/if}
+							{#if latest.shoeSizeUs}
+								<div class="bg-base-200 rounded-lg p-2">
+									<div class="opacity-60 text-xs">{$t('children.shoeSizeUs')}</div>
+									<div class="font-medium">{latest.shoeSizeUs}</div>
 								</div>
 							{/if}
 						</div>
@@ -535,8 +547,8 @@
 											<tr>
 												<th>{$t('children.measuredAt')}</th>
 												<th>{$t('children.height')}</th>
-												<th>{$t('children.clothingSize')}</th>
-												<th>{$t('children.shoeSize')}</th>
+												<th>{$t('children.clothingSizeDe')}</th>
+												<th>{$t('children.shoeSizeEu')}</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -544,8 +556,8 @@
 												<tr>
 													<td>{formatDate(m.measuredAt)}</td>
 													<td>{m.heightCm ?? '-'}</td>
-													<td>{m.clothingSize ?? '-'}</td>
-													<td>{m.shoeSize ?? '-'}</td>
+													<td>{m.clothingSizeDe ?? '-'}</td>
+													<td>{m.shoeSizeEu ?? '-'}</td>
 												</tr>
 											{/each}
 										</tbody>
@@ -653,24 +665,46 @@
 									/>
 								</div>
 								<div class="form-control">
-									<label class="label" for="m-clothingSize">
-										<span class="label-text text-xs">{$t('children.clothingSize')}</span>
+									<label class="label" for="m-clothingSizeDe">
+										<span class="label-text text-xs">{$t('children.clothingSizeDe')}</span>
 									</label>
 									<input
-										id="m-clothingSize"
+										id="m-clothingSizeDe"
 										type="text"
-										name="clothingSize"
+										name="clothingSizeDe"
 										class="input input-bordered input-sm"
 									/>
 								</div>
 								<div class="form-control">
-									<label class="label" for="m-shoeSize">
-										<span class="label-text text-xs">{$t('children.shoeSize')}</span>
+									<label class="label" for="m-clothingSizeUs">
+										<span class="label-text text-xs">{$t('children.clothingSizeUs')}</span>
 									</label>
 									<input
-										id="m-shoeSize"
+										id="m-clothingSizeUs"
 										type="text"
-										name="shoeSize"
+										name="clothingSizeUs"
+										class="input input-bordered input-sm"
+									/>
+								</div>
+								<div class="form-control">
+									<label class="label" for="m-shoeSizeEu">
+										<span class="label-text text-xs">{$t('children.shoeSizeEu')}</span>
+									</label>
+									<input
+										id="m-shoeSizeEu"
+										type="text"
+										name="shoeSizeEu"
+										class="input input-bordered input-sm"
+									/>
+								</div>
+								<div class="form-control">
+									<label class="label" for="m-shoeSizeUs">
+										<span class="label-text text-xs">{$t('children.shoeSizeUs')}</span>
+									</label>
+									<input
+										id="m-shoeSizeUs"
+										type="text"
+										name="shoeSizeUs"
 										class="input input-bordered input-sm"
 									/>
 								</div>
@@ -862,7 +896,7 @@
 											{$t(`inventory.clothingTypes.${assignment.clothingPiece.type}`)}
 										</span>
 										<span class="badge badge-outline badge-xs">
-											{$t('inventory.size')}: {assignment.clothingPiece.size}
+											{$t('inventory.size')}: {assignment.clothingPiece.sizeDe || assignment.clothingPiece.sizeEu || '-'}
 										</span>
 										{#if assignment.clothingPiece.color}
 											<span class="badge badge-outline badge-xs">

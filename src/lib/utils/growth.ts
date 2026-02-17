@@ -53,7 +53,7 @@ export interface GrowthPrediction {
 export function predictGrowth(
 	childId: string,
 	childName: string,
-	measurements: Array<{ measuredAt: Date; heightCm: number | null; clothingSize: string | null }>,
+	measurements: Array<{ measuredAt: Date; heightCm: number | null; clothingSizeDe: string | null }>,
 	monthsAhead: number = 3
 ): GrowthPrediction | null {
 	// Need at least 2 measurements with height
@@ -75,7 +75,7 @@ export function predictGrowth(
 
 	if (growthRateCmPerMonth <= 0) return null; // not growing
 
-	const currentSize = latest.clothingSize || getSizeForHeight(latest.heightCm!) || '';
+	const currentSize = latest.clothingSizeDe || getSizeForHeight(latest.heightCm!) || '';
 	const sizeRange = getSizeRange(currentSize);
 
 	if (!sizeRange) return null;

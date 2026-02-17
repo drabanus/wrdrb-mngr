@@ -116,8 +116,13 @@ export const actions: Actions = {
 				headCircCm: parseFloat_(data.get('headCircCm')),
 				bellyCircCm: parseFloat_(data.get('bellyCircCm')),
 				hipCircCm: parseFloat_(data.get('hipCircCm')),
-				clothingSize: (data.get('clothingSize') as string) || null,
-				shoeSize: (data.get('shoeSize') as string) || null
+				clothingSizeDe: (data.get('clothingSizeDe') as string) || null,
+				clothingSizeEu: (data.get('clothingSizeEu') as string) || null,
+				clothingSizeUs: (data.get('clothingSizeUs') as string) || null,
+				clothingSizeUk: (data.get('clothingSizeUk') as string) || null,
+				shoeSizeEu: (data.get('shoeSizeEu') as string) || null,
+				shoeSizeUs: (data.get('shoeSizeUs') as string) || null,
+				shoeSizeUk: (data.get('shoeSizeUk') as string) || null
 			}
 		});
 
