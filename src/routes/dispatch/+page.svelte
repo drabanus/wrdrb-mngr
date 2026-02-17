@@ -157,7 +157,7 @@
 							<div class="flex items-center gap-2 flex-shrink-0">
 								<button
 									class="btn btn-ghost btn-xs text-error"
-									onclick|stopPropagation={() => openDeleteConfirm(gig.id)}
+									onclick={(e) => { e.stopPropagation(); openDeleteConfirm(gig.id); }}
 								>
 									{$t('common.delete')}
 								</button>

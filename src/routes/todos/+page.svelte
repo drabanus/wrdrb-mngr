@@ -273,7 +273,7 @@
 									<button
 										type="submit"
 										class="btn btn-warning btn-xs"
-										onclick|stopPropagation
+										onclick={(e) => e.stopPropagation()}
 									>
 										{$t('todos.markInProgress')}
 									</button>
@@ -294,7 +294,7 @@
 									<button
 										type="submit"
 										class="btn btn-success btn-xs"
-										onclick|stopPropagation
+										onclick={(e) => e.stopPropagation()}
 									>
 										{$t('todos.markDone')}
 									</button>
