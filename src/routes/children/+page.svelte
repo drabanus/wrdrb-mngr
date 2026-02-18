@@ -23,6 +23,10 @@
 		return gender === 'girl' ? 'badge-secondary' : 'badge-accent';
 	}
 
+	function formatDateForInput(date: Date | string): string {
+		return new Date(date).toISOString().split('T')[0];
+	}
+
 	// --- Filter / Search state ---
 
 	let genderFilter = $state<'all' | 'girl' | 'boy'>('all');
@@ -62,7 +66,7 @@
 	let detailTab = $state<'info' | 'measurements' | 'contacts' | 'equipment'>('info');
 
 	function openDetail(child: any) {
-		selectedChild = { ...child };
+		selectedChild = { ...child, birthDateInput: formatDateForInput(child.birthDate), notes: child.notes ?? '' };
 		detailTab = 'info';
 		showMeasurementForm = false;
 		showContactForm = false;
@@ -72,7 +76,7 @@
 		selectedChild = null;
 	}
 
-	// Reactive: keep selectedChild in sync with data after form submission
+	// Reactive: keep currentChild in sync with data after form submission (for display-only fields)
 	let currentChild = $derived(
 		selectedChild
 			? data.children.find((c: any) => c.id === selectedChild.id) ?? null
@@ -348,7 +352,7 @@
 						};
 					}}
 				>
-					<input type="hidden" name="id" value={currentChild.id} />
+					<input type="hidden" name="id" value={selectedChild.id} />
 
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 						<div class="form-control">
@@ -360,7 +364,7 @@
 								type="text"
 								name="firstName"
 								class="input input-bordered"
-								value={currentChild.firstName}
+								bind:value={selectedChild.firstName}
 								required
 							/>
 						</div>
@@ -374,7 +378,7 @@
 								type="text"
 								name="lastName"
 								class="input input-bordered"
-								value={currentChild.lastName}
+								bind:value={selectedChild.lastName}
 								required
 							/>
 						</div>
@@ -388,7 +392,7 @@
 								type="date"
 								name="birthDate"
 								class="input input-bordered"
-								value={new Date(currentChild.birthDate).toISOString().split('T')[0]}
+								bind:value={selectedChild.birthDateInput}
 								required
 							/>
 						</div>
@@ -401,12 +405,13 @@
 								id="edit-gender"
 								name="gender"
 								class="select select-bordered"
+								bind:value={selectedChild.gender}
 								required
 							>
-								<option value="girl" selected={currentChild.gender === 'girl'}>
+								<option value="girl">
 									{$t('children.girl')}
 								</option>
-								<option value="boy" selected={currentChild.gender === 'boy'}>
+								<option value="boy">
 									{$t('children.boy')}
 								</option>
 							</select>
@@ -422,7 +427,8 @@
 							name="notes"
 							class="textarea textarea-bordered"
 							rows="2"
-						>{currentChild.notes ?? ''}</textarea>
+							bind:value={selectedChild.notes}
+						></textarea>
 					</div>
 
 					<div class="form-control mt-3">
@@ -431,10 +437,10 @@
 								type="checkbox"
 								name="active"
 								class="toggle toggle-primary"
-								checked={currentChild.active}
+								bind:checked={selectedChild.active}
 							/>
 							<span class="label-text">
-								{currentChild.active ? $t('children.active') : $t('children.inactive')}
+								{selectedChild.active ? $t('children.active') : $t('children.inactive')}
 							</span>
 						</label>
 					</div>
@@ -443,7 +449,7 @@
 						<button
 							type="button"
 							class="btn btn-error btn-outline btn-sm"
-							onclick={() => { closeDetail(); openDeleteConfirm(currentChild.id); }}
+							onclick={() => { closeDetail(); openDeleteConfirm(selectedChild.id); }}
 						>
 							{$t('children.delete')}
 						</button>

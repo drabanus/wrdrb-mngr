@@ -17,7 +17,7 @@
 	const roles = ['admin', 'receptionist', 'laundry', 'mender'];
 
 	function openAdd() {
-		editingUser = null;
+		editingUser = { id: '', name: '', username: '', email: '', role: 'admin', active: true };
 		showModal = true;
 	}
 
@@ -206,11 +206,11 @@
 	<dialog class="modal modal-open">
 		<div class="modal-box">
 			<h3 class="font-bold text-lg mb-4">
-				{editingUser ? $t('personnel.editPerson') : $t('personnel.addPerson')}
+				{editingUser?.id ? $t('personnel.editPerson') : $t('personnel.addPerson')}
 			</h3>
 			<form
 				method="POST"
-				action={editingUser ? '?/update' : '?/create'}
+				action={editingUser?.id ? '?/update' : '?/create'}
 				use:enhance={() => {
 					return async ({ update }) => {
 						await update();
@@ -218,7 +218,7 @@
 					};
 				}}
 			>
-				{#if editingUser}
+				{#if editingUser?.id}
 					<input type="hidden" name="id" value={editingUser.id} />
 				{/if}
 
@@ -231,7 +231,7 @@
 						type="text"
 						name="name"
 						class="input input-bordered"
-						value={editingUser?.name ?? ''}
+						bind:value={editingUser.name}
 						required
 					/>
 				</div>
@@ -245,11 +245,11 @@
 						type="text"
 						name="username"
 						class="input input-bordered"
-						value={editingUser?.username ?? ''}
+						bind:value={editingUser.username}
 						required
-						disabled={!!editingUser}
+						disabled={!!editingUser?.id}
 					/>
-					{#if editingUser}
+					{#if editingUser?.id}
 						<input type="hidden" name="username" value={editingUser.username} />
 					{/if}
 				</div>
@@ -263,9 +263,9 @@
 						type="password"
 						name="password"
 						class="input input-bordered"
-						required={!editingUser}
+						required={!editingUser?.id}
 					/>
-					{#if editingUser}
+					{#if editingUser?.id}
 						<label class="label">
 							<span class="label-text-alt opacity-60">{$t('personnel.passwordHint')}</span>
 						</label>
@@ -281,7 +281,7 @@
 						type="email"
 						name="email"
 						class="input input-bordered"
-						value={editingUser?.email ?? ''}
+						bind:value={editingUser.email}
 						required
 					/>
 				</div>
@@ -294,24 +294,25 @@
 						id="person-role"
 						name="role"
 						class="select select-bordered"
+						bind:value={editingUser.role}
 						required
 					>
 						{#each roles as role}
-							<option value={role} selected={editingUser?.role === role}>
+							<option value={role}>
 								{$t(`personnel.roles.${role}`)}
 							</option>
 						{/each}
 					</select>
 				</div>
 
-				{#if editingUser}
+				{#if editingUser?.id}
 					<div class="form-control mb-4">
 						<label class="label cursor-pointer justify-start gap-3">
 							<input
 								type="checkbox"
 								name="active"
 								class="toggle toggle-success"
-								checked={editingUser.active}
+								bind:checked={editingUser.active}
 							/>
 							<span class="label-text">
 								{editingUser.active ? $t('personnel.active') : $t('personnel.inactive')}
@@ -321,7 +322,7 @@
 				{/if}
 
 				<div class="modal-action">
-					{#if editingUser}
+					{#if editingUser?.id}
 						<button
 							type="button"
 							class="btn btn-error btn-outline mr-auto"

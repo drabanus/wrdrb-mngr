@@ -60,7 +60,7 @@
 	);
 
 	function openAddBag() {
-		editingBag = null;
+		editingBag = { id: '', label: '', type: 'clothing_bag', condition: 'good', notes: '' };
 		showBagModal = true;
 	}
 
@@ -75,7 +75,7 @@
 	}
 
 	function openAddClothing() {
-		editingClothing = null;
+		editingClothing = { id: '', type: 'kleid', sizeDe: '', sizeEu: '', sizeUs: '', sizeUk: '', color: '', condition: 'good', season: 'all', bagId: '', notes: '' };
 		showClothingModal = true;
 	}
 
@@ -337,11 +337,11 @@
 	<dialog class="modal modal-open">
 		<div class="modal-box">
 			<h3 class="font-bold text-lg mb-4">
-				{editingBag ? $t('common.edit') : $t('inventory.addBag')}
+				{editingBag?.id ? $t('common.edit') : $t('inventory.addBag')}
 			</h3>
 			<form
 				method="POST"
-				action={editingBag ? '?/updateBag' : '?/createBag'}
+				action={editingBag?.id ? '?/updateBag' : '?/createBag'}
 				use:enhance={() => {
 					return async ({ update }) => {
 						await update();
@@ -349,7 +349,7 @@
 					};
 				}}
 			>
-				{#if editingBag}
+				{#if editingBag?.id}
 					<input type="hidden" name="id" value={editingBag.id} />
 				{/if}
 
@@ -362,7 +362,7 @@
 						type="text"
 						name="label"
 						class="input input-bordered"
-						value={editingBag?.label ?? ''}
+						bind:value={editingBag.label}
 						required
 					/>
 				</div>
@@ -371,9 +371,9 @@
 					<label class="label" for="bag-type">
 						<span class="label-text">{$t('inventory.type')}</span>
 					</label>
-					<select id="bag-type" name="type" class="select select-bordered" required>
+					<select id="bag-type" name="type" class="select select-bordered" bind:value={editingBag.type} required>
 						{#each bagTypes as bt}
-							<option value={bt} selected={editingBag?.type === bt}>
+							<option value={bt}>
 								{$t(`inventory.bagTypes.${bt}`)}
 							</option>
 						{/each}
@@ -384,9 +384,9 @@
 					<label class="label" for="bag-condition">
 						<span class="label-text">{$t('inventory.condition')}</span>
 					</label>
-					<select id="bag-condition" name="condition" class="select select-bordered">
+					<select id="bag-condition" name="condition" class="select select-bordered" bind:value={editingBag.condition}>
 						{#each bagConditions as c}
-							<option value={c} selected={editingBag?.condition === c}>
+							<option value={c}>
 								{$t(`inventory.conditions.${c}`)}
 							</option>
 						{/each}
@@ -402,11 +402,12 @@
 						name="notes"
 						class="textarea textarea-bordered"
 						rows="2"
-					>{editingBag?.notes ?? ''}</textarea>
+						bind:value={editingBag.notes}
+					></textarea>
 				</div>
 
 				<div class="modal-action">
-					{#if editingBag}
+					{#if editingBag?.id}
 						<button
 							type="button"
 							class="btn btn-error btn-outline mr-auto"
@@ -435,11 +436,11 @@
 	<dialog class="modal modal-open">
 		<div class="modal-box">
 			<h3 class="font-bold text-lg mb-4">
-				{editingClothing ? $t('common.edit') : $t('inventory.addClothing')}
+				{editingClothing?.id ? $t('common.edit') : $t('inventory.addClothing')}
 			</h3>
 			<form
 				method="POST"
-				action={editingClothing ? '?/updateClothing' : '?/createClothing'}
+				action={editingClothing?.id ? '?/updateClothing' : '?/createClothing'}
 				use:enhance={() => {
 					return async ({ update }) => {
 						await update();
@@ -447,7 +448,7 @@
 					};
 				}}
 			>
-				{#if editingClothing}
+				{#if editingClothing?.id}
 					<input type="hidden" name="id" value={editingClothing.id} />
 				{/if}
 
@@ -456,9 +457,9 @@
 						<label class="label" for="clothing-type">
 							<span class="label-text">{$t('inventory.type')}</span>
 						</label>
-						<select id="clothing-type" name="type" class="select select-bordered" required>
+						<select id="clothing-type" name="type" class="select select-bordered" bind:value={editingClothing.type} required>
 							{#each clothingTypes as ct}
-								<option value={ct} selected={editingClothing?.type === ct}>
+								<option value={ct}>
 									{$t(`inventory.clothingTypes.${ct}`)}
 								</option>
 							{/each}
@@ -474,7 +475,7 @@
 							type="text"
 							name="sizeDe"
 							class="input input-bordered"
-							value={editingClothing?.sizeDe ?? ''}
+							bind:value={editingClothing.sizeDe}
 						/>
 					</div>
 
@@ -487,7 +488,7 @@
 							type="text"
 							name="sizeEu"
 							class="input input-bordered"
-							value={editingClothing?.sizeEu ?? ''}
+							bind:value={editingClothing.sizeEu}
 						/>
 					</div>
 
@@ -500,7 +501,7 @@
 							type="text"
 							name="sizeUs"
 							class="input input-bordered"
-							value={editingClothing?.sizeUs ?? ''}
+							bind:value={editingClothing.sizeUs}
 						/>
 					</div>
 
@@ -513,7 +514,7 @@
 							type="text"
 							name="sizeUk"
 							class="input input-bordered"
-							value={editingClothing?.sizeUk ?? ''}
+							bind:value={editingClothing.sizeUk}
 						/>
 					</div>
 
@@ -526,7 +527,7 @@
 							type="text"
 							name="color"
 							class="input input-bordered"
-							value={editingClothing?.color ?? ''}
+							bind:value={editingClothing.color}
 						/>
 					</div>
 
@@ -534,9 +535,9 @@
 						<label class="label" for="clothing-condition">
 							<span class="label-text">{$t('inventory.condition')}</span>
 						</label>
-						<select id="clothing-condition" name="condition" class="select select-bordered">
+						<select id="clothing-condition" name="condition" class="select select-bordered" bind:value={editingClothing.condition}>
 							{#each conditions as c}
-								<option value={c} selected={editingClothing?.condition === c}>
+								<option value={c}>
 									{$t(`inventory.conditions.${c}`)}
 								</option>
 							{/each}
@@ -547,9 +548,9 @@
 						<label class="label" for="clothing-season">
 							<span class="label-text">{$t('inventory.season')}</span>
 						</label>
-						<select id="clothing-season" name="season" class="select select-bordered">
+						<select id="clothing-season" name="season" class="select select-bordered" bind:value={editingClothing.season}>
 							{#each seasons as s}
-								<option value={s} selected={editingClothing?.season === s}>
+								<option value={s}>
 									{$t(`inventory.seasons.${s}`)}
 								</option>
 							{/each}
@@ -560,10 +561,10 @@
 						<label class="label" for="clothing-bag">
 							<span class="label-text">{$t('inventory.inBag')}</span>
 						</label>
-						<select id="clothing-bag" name="bagId" class="select select-bordered">
+						<select id="clothing-bag" name="bagId" class="select select-bordered" bind:value={editingClothing.bagId}>
 							<option value="">-</option>
 							{#each data.allBags as bag}
-								<option value={bag.id} selected={editingClothing?.bagId === bag.id}>
+								<option value={bag.id}>
 									{bag.label}
 								</option>
 							{/each}
@@ -580,11 +581,12 @@
 						name="notes"
 						class="textarea textarea-bordered"
 						rows="2"
-					>{editingClothing?.notes ?? ''}</textarea>
+						bind:value={editingClothing.notes}
+					></textarea>
 				</div>
 
 				<div class="modal-action">
-					{#if editingClothing}
+					{#if editingClothing?.id}
 						<button
 							type="button"
 							class="btn btn-error btn-outline mr-auto"

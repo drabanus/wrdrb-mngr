@@ -69,12 +69,12 @@
 	}
 
 	function openAddModal() {
-		editingTodo = null;
+		editingTodo = { id: '', title: '', type: 'custom', priority: 'normal', status: 'open', assignedTo: '', dueDate: '', description: '' };
 		showEditModal = true;
 	}
 
 	function openEditModal(todo: any) {
-		editingTodo = { ...todo };
+		editingTodo = { ...todo, dueDate: formatDateForInput(todo.dueDate ?? null) };
 		showEditModal = true;
 	}
 
@@ -313,11 +313,11 @@
 	<dialog class="modal modal-open">
 		<div class="modal-box">
 			<h3 class="font-bold text-lg mb-4">
-				{editingTodo ? $t('todos.editTask') : $t('todos.addTask')}
+				{editingTodo?.id ? $t('todos.editTask') : $t('todos.addTask')}
 			</h3>
 			<form
 				method="POST"
-				action={editingTodo ? '?/update' : '?/create'}
+				action={editingTodo?.id ? '?/update' : '?/create'}
 				use:enhance={() => {
 					return async ({ update }) => {
 						await update();
@@ -325,7 +325,7 @@
 					};
 				}}
 			>
-				{#if editingTodo}
+				{#if editingTodo?.id}
 					<input type="hidden" name="id" value={editingTodo.id} />
 				{/if}
 
@@ -338,7 +338,7 @@
 						type="text"
 						name="title"
 						class="input input-bordered"
-						value={editingTodo?.title ?? ''}
+						bind:value={editingTodo.title}
 						required
 					/>
 				</div>
@@ -348,9 +348,9 @@
 						<label class="label" for="todo-type">
 							<span class="label-text">{$t('todos.type')}</span>
 						</label>
-						<select id="todo-type" name="type" class="select select-bordered" required>
+						<select id="todo-type" name="type" class="select select-bordered" bind:value={editingTodo.type} required>
 							{#each todoTypes as tt}
-								<option value={tt} selected={editingTodo?.type === tt}>
+								<option value={tt}>
 									{$t(`todos.types.${tt}`)}
 								</option>
 							{/each}
@@ -361,9 +361,9 @@
 						<label class="label" for="todo-priority">
 							<span class="label-text">{$t('todos.priority')}</span>
 						</label>
-						<select id="todo-priority" name="priority" class="select select-bordered">
+						<select id="todo-priority" name="priority" class="select select-bordered" bind:value={editingTodo.priority}>
 							{#each priorities as p}
-								<option value={p} selected={editingTodo?.priority === p}>
+								<option value={p}>
 									{$t(`todos.priorities.${p}`)}
 								</option>
 							{/each}
@@ -371,14 +371,14 @@
 					</div>
 				</div>
 
-				{#if editingTodo}
+				{#if editingTodo?.id}
 					<div class="form-control mt-3">
 						<label class="label" for="todo-status">
 							<span class="label-text">{$t('todos.status')}</span>
 						</label>
-						<select id="todo-status" name="status" class="select select-bordered">
+						<select id="todo-status" name="status" class="select select-bordered" bind:value={editingTodo.status}>
 							{#each statuses as s}
-								<option value={s} selected={editingTodo?.status === s}>
+								<option value={s}>
 									{$t(`todos.statuses.${s}`)}
 								</option>
 							{/each}
@@ -390,10 +390,10 @@
 					<label class="label" for="todo-assigned">
 						<span class="label-text">{$t('todos.assignedTo')}</span>
 					</label>
-					<select id="todo-assigned" name="assignedTo" class="select select-bordered">
+					<select id="todo-assigned" name="assignedTo" class="select select-bordered" bind:value={editingTodo.assignedTo}>
 						<option value="">-</option>
 						{#each data.users as user}
-							<option value={user.id} selected={editingTodo?.assignedTo === user.id}>
+							<option value={user.id}>
 								{user.name}
 							</option>
 						{/each}
@@ -409,7 +409,7 @@
 						type="date"
 						name="dueDate"
 						class="input input-bordered"
-						value={formatDateForInput(editingTodo?.dueDate ?? null)}
+						bind:value={editingTodo.dueDate}
 					/>
 				</div>
 
@@ -422,11 +422,12 @@
 						name="description"
 						class="textarea textarea-bordered"
 						rows="3"
-					>{editingTodo?.description ?? ''}</textarea>
+						bind:value={editingTodo.description}
+					></textarea>
 				</div>
 
 				<div class="modal-action">
-					{#if editingTodo}
+					{#if editingTodo?.id}
 						<button
 							type="button"
 							class="btn btn-error btn-outline mr-auto"
