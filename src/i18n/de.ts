@@ -306,6 +306,8 @@ export default {
 		yes: 'Ja',
 		no: 'Nein',
 		close: 'Schließen',
-		of: 'von'
+		of: 'von',
+		accessDenied: 'Entschuldigung, mit deiner aktuellen Rolle hast du keinen Zugriff auf diesen Bereich.',
+		backToDashboard: 'Zurück zur Übersicht'
 	}
 };

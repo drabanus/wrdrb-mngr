@@ -11,18 +11,33 @@
 
 	let drawerOpen = $state(false);
 
-	const navItems = $derived([
-		{ href: `${base}/dashboard`, icon: '📊', key: 'nav.dashboard' },
-		{ href: `${base}/children`, icon: '👧', key: 'nav.children' },
-		{ href: `${base}/personnel`, icon: '👤', key: 'nav.personnel' },
-		{ href: `${base}/inventory`, icon: '👗', key: 'nav.inventory' },
-		{ href: `${base}/assignments`, icon: '🔗', key: 'nav.assignments' },
-		{ href: `${base}/scanning`, icon: '📱', key: 'nav.scanning' },
-		{ href: `${base}/dispatch`, icon: '📦', key: 'nav.dispatch' },
-		{ href: `${base}/todos`, icon: '✅', key: 'nav.todos' },
-		{ href: `${base}/calendar`, icon: '📅', key: 'nav.calendar' },
-		{ href: `${base}/settings`, icon: '⚙️', key: 'nav.settings' }
-	]);
+	// Route access rules (mirrored from server-side ROUTE_ACCESS)
+	const routeAccess: Record<string, string[]> = {
+		'/personnel': ['admin'],
+		'/assignments': ['admin', 'receptionist'],
+		'/dispatch': ['admin', 'receptionist']
+	};
+
+	function canAccess(route: string): boolean {
+		const allowed = routeAccess[route];
+		if (!allowed) return true; // No restriction
+		return !!data.user && allowed.includes(data.user.role);
+	}
+
+	const allNavItems = [
+		{ href: `${base}/dashboard`, route: '/dashboard', icon: '📊', key: 'nav.dashboard' },
+		{ href: `${base}/children`, route: '/children', icon: '👧', key: 'nav.children' },
+		{ href: `${base}/personnel`, route: '/personnel', icon: '👤', key: 'nav.personnel' },
+		{ href: `${base}/inventory`, route: '/inventory', icon: '👗', key: 'nav.inventory' },
+		{ href: `${base}/assignments`, route: '/assignments', icon: '🔗', key: 'nav.assignments' },
+		{ href: `${base}/scanning`, route: '/scanning', icon: '📱', key: 'nav.scanning' },
+		{ href: `${base}/dispatch`, route: '/dispatch', icon: '📦', key: 'nav.dispatch' },
+		{ href: `${base}/todos`, route: '/todos', icon: '✅', key: 'nav.todos' },
+		{ href: `${base}/calendar`, route: '/calendar', icon: '📅', key: 'nav.calendar' },
+		{ href: `${base}/settings`, route: '/settings', icon: '⚙️', key: 'nav.settings' }
+	];
+
+	const navItems = $derived(allNavItems.filter(item => canAccess(item.route)));
 
 	function isActive(href: string): boolean {
 		return $page.url.pathname.startsWith(href);

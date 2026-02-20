@@ -306,6 +306,8 @@ export default {
 		yes: 'Sí',
 		no: 'No',
 		close: 'Cerrar',
-		of: 'de'
+		of: 'de',
+		accessDenied: 'Lo sentimos, con tu rol actual no tienes acceso a esta área.',
+		backToDashboard: 'Volver al panel'
 	}
 };

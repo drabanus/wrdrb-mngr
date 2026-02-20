@@ -306,6 +306,8 @@ export default {
 		yes: 'Yes',
 		no: 'No',
 		close: 'Close',
-		of: 'of'
+		of: 'of',
+		accessDenied: 'Sorry, you don\'t have access to this area with your current role.',
+		backToDashboard: 'Back to Dashboard'
 	}
 };
