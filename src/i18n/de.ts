@@ -302,6 +302,7 @@ export default {
 		smtpFrom: 'Absender-Adresse',
 		reminderLeadDays: 'Erinnerungsvorlauf (Tage)',
 		save: 'Speichern',
+		testEmail: 'Test-E-Mail senden',
 		saved: 'Gespeichert!',
 		orgName: 'Organisationsname'
 	},

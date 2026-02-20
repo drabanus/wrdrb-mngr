@@ -302,6 +302,7 @@ export default {
 		smtpFrom: 'Sender address',
 		reminderLeadDays: 'Reminder lead time (days)',
 		save: 'Save',
+		testEmail: 'Send test email',
 		saved: 'Saved!',
 		orgName: 'Organization name'
 	},

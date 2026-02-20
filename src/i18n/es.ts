@@ -302,6 +302,7 @@ export default {
 		smtpFrom: 'Dirección del remitente',
 		reminderLeadDays: 'Anticipación del recordatorio (días)',
 		save: 'Guardar',
+		testEmail: 'Enviar correo de prueba',
 		saved: '¡Guardado!',
 		orgName: 'Nombre de la organización'
 	},
