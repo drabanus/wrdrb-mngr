@@ -156,26 +156,30 @@ fi
 
 # ── 8. Create start script ──────────────────────────────────
 START_SCRIPT="$APP_DIR/start.sh"
-cat > "$START_SCRIPT" <<'STARTEOF'
+NODE_BIN="$(which node)"
+info "Using Node.js at: $NODE_BIN"
+
+cat > "$START_SCRIPT" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
-DIR="$(cd "$(dirname "$0")" && pwd)"
+DIR="\$(cd "\$(dirname "\$0")" && pwd)"
 
 # Load .env if present
-if [ -f "$DIR/.env" ]; then
+if [ -f "\$DIR/.env" ]; then
   set -a
-  source "$DIR/.env"
+  source "\$DIR/.env"
   set +a
 fi
 
-export PORT="${PORT:-3000}"
-export ORIGIN="${ORIGIN:-http://localhost:$PORT}"
-export NODE_ENV="${NODE_ENV:-production}"
+export PORT="\${PORT:-3000}"
+export ORIGIN="\${ORIGIN:-http://localhost:\$PORT}"
+export NODE_ENV="\${NODE_ENV:-production}"
 
-exec node "$DIR/build/index.js"
-STARTEOF
+# Use the Node.js binary found at install time
+exec ${NODE_BIN} "\$DIR/build/index.js"
+EOF
 chmod +x "$START_SCRIPT"
-ok "start.sh created"
+ok "start.sh created (node: $NODE_BIN)"
 
 # ── 9. (Optional) Install systemd service ───────────────────
 install_systemd() {
