@@ -154,50 +154,14 @@ else
   warn ".env already exists – skipping (check PORT=$PORT and ORIGIN=$ORIGIN)"
 fi
 
-# ── 8. Create start script ──────────────────────────────────
+# ── 8. Ensure start script is executable ──────────────────────
 START_SCRIPT="$APP_DIR/start.sh"
-info "Creating start.sh..."
-
-cat > "$START_SCRIPT" <<'STARTEOF'
-#!/usr/bin/env bash
-set -euo pipefail
-DIR="$(cd "$(dirname "$0")" && pwd)"
-
-# Load .env if present
-if [ -f "$DIR/.env" ]; then
-  set -a
-  source "$DIR/.env"
-  set +a
+if [ -f "$START_SCRIPT" ]; then
+  chmod +x "$START_SCRIPT"
+  ok "start.sh already present"
+else
+  err "start.sh missing – it should be part of the repository"
 fi
-
-export PORT="${PORT:-3000}"
-export ORIGIN="${ORIGIN:-http://localhost:$PORT}"
-export NODE_ENV="${NODE_ENV:-production}"
-
-# Resolve Node.js binary – check common locations so this works
-# under systemd (which has a minimal PATH) and interactive shells.
-find_node() {
-  # 1. Already on PATH?
-  command -v node 2>/dev/null && return
-  # 2. Common install locations
-  for candidate in \
-    /usr/local/bin/node \
-    /usr/bin/node \
-    "$HOME/.local/share/fnm/aliases/default/bin/node" \
-    "$HOME/.fnm/aliases/default/bin/node" \
-    "$HOME/.nvm/versions/node/$(ls "$HOME/.nvm/versions/node/" 2>/dev/null | sort -V | tail -1)/bin/node" \
-    ; do
-    [ -x "$candidate" ] && echo "$candidate" && return
-  done
-  echo "ERROR: node not found. Install Node.js >= 18 and make sure it is on PATH." >&2
-  exit 1
-}
-
-NODE_BIN="$(find_node)"
-exec "$NODE_BIN" "$DIR/build/index.js"
-STARTEOF
-chmod +x "$START_SCRIPT"
-ok "start.sh created"
 
 # ── 9. (Optional) Install systemd service ───────────────────
 install_systemd() {

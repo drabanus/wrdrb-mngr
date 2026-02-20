@@ -81,11 +81,6 @@ Environment=ORIGIN=${ORIGIN}
 Environment=HOME=${SERVICE_HOME}
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${SERVICE_HOME}/.local/share/fnm/aliases/default/bin:${SERVICE_HOME}/.fnm/aliases/default/bin
 
-# Hardening
-NoNewPrivileges=true
-ProtectSystem=strict
-ReadWritePaths=${APP_DIR}
-
 [Install]
 WantedBy=multi-user.target
 EOF
