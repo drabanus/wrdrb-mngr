@@ -225,16 +225,16 @@
 														<form method="POST" action="?/dispatchBag" use:enhance>
 															<input type="hidden" name="gigId" value={gig.id} />
 															<input type="hidden" name="bagId" value={bag.id} />
-															<button type="submit" class="btn btn-xs btn-primary">
-																{$t('dispatch.dispatched')}
+															<button type="submit" class="btn btn-xs btn-outline btn-primary">
+																{$t('dispatch.doDispatch')}
 															</button>
 														</form>
 													{:else if status === 'dispatched'}
 														<form method="POST" action="?/receiveBag" use:enhance>
 															<input type="hidden" name="gigId" value={gig.id} />
 															<input type="hidden" name="bagId" value={bag.id} />
-															<button type="submit" class="btn btn-xs btn-success">
-																{$t('dispatch.received')}
+															<button type="submit" class="btn btn-xs btn-outline btn-success">
+																{$t('dispatch.doReceive')}
 															</button>
 														</form>
 													{:else}

@@ -206,6 +206,8 @@ export default {
 		markDirty: 'Schmutzig',
 		markRepair: 'Reparatur nötig',
 		markOk: 'In Ordnung',
+		doDispatch: 'Ausgeben',
+		doReceive: 'Annehmen',
 		reception: 'Rücknahme',
 		checkAll: 'Alle prüfen',
 		gigName: 'Name des Auftritts',

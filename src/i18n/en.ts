@@ -206,6 +206,8 @@ export default {
 		markDirty: 'Dirty',
 		markRepair: 'Needs repair',
 		markOk: 'OK',
+		doDispatch: 'Hand out',
+		doReceive: 'Take back',
 		reception: 'Reception',
 		checkAll: 'Check all',
 		gigName: 'Gig name',

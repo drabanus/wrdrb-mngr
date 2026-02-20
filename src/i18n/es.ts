@@ -206,6 +206,8 @@ export default {
 		markDirty: 'Sucio',
 		markRepair: 'Necesita reparación',
 		markOk: 'En orden',
+		doDispatch: 'Entregar',
+		doReceive: 'Recibir',
 		reception: 'Recepción',
 		checkAll: 'Revisar todo',
 		gigName: 'Nombre de la actuación',
