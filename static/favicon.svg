@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#4f46e5"/>
+  <!-- Wardrobe body -->
+  <rect x="120" y="80" width="272" height="360" rx="16" fill="#ffffff"/>
+  <!-- Center divider -->
+  <line x1="256" y1="96" x2="256" y2="424" stroke="#4f46e5" stroke-width="4"/>
+  <!-- Left door panel -->
+  <rect x="136" y="96" width="112" height="312" rx="4" fill="#eef2ff"/>
+  <!-- Right door panel -->
+  <rect x="264" y="96" width="112" height="312" rx="4" fill="#eef2ff"/>
+  <!-- Left door handle -->
+  <circle cx="236" cy="252" r="8" fill="#4f46e5"/>
+  <!-- Right door handle -->
+  <circle cx="276" cy="252" r="8" fill="#4f46e5"/>
+  <!-- Hanger on left side (visible through slight gap) -->
+  <path d="M172 160 L172 148 Q172 136 184 136 L196 136" stroke="#6366f1" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <line x1="160" y1="160" x2="210" y2="160" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
+  <!-- Hanger on right side -->
+  <path d="M320 160 L320 148 Q320 136 332 136 L344 136" stroke="#6366f1" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <line x1="308" y1="160" x2="358" y2="160" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
+  <!-- Wardrobe legs -->
+  <rect x="132" y="440" width="20" height="20" rx="4" fill="#ffffff"/>
+  <rect x="360" y="440" width="20" height="20" rx="4" fill="#ffffff"/>
+  <!-- Top crown/molding -->
+  <rect x="112" y="72" width="288" height="16" rx="8" fill="#ffffff"/>
+</svg>
