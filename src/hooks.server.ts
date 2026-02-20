@@ -1,4 +1,4 @@
-import { error, redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { base } from '$app/paths';
 import { validateSession } from '$lib/server/auth';
 import { ROUTE_ACCESS, hasRole } from '$lib/server/roles';
@@ -18,12 +18,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		redirect(302, `${base}/login`);
 	}
 
-	// Role-based route access control
+	// Role-based route access control — redirect to dashboard if forbidden
+	// (error() in hooks bypasses +error.svelte, so we redirect instead)
 	const relativePath = pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
 	for (const [route, allowedRoles] of Object.entries(ROUTE_ACCESS)) {
 		if (relativePath === route || relativePath.startsWith(route + '/')) {
 			if (!hasRole(event.locals.user.role, ...allowedRoles)) {
-				error(403, 'Forbidden');
+				redirect(302, `${base}/dashboard`);
 			}
 			break;
 		}

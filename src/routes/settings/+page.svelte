@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { t, locale, locales } from '$i18n';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import { settings } from '$lib/stores/settings';
 
 	let { data, form } = $props();
+
+	const isAdmin = $derived($page.data.user?.role === 'admin');
 
 	// Appearance state - initialized from settings store
 	let currentTheme = $state($settings.theme);
@@ -125,6 +128,7 @@
 		</div>
 	</div>
 
+	{#if isAdmin}
 	<!-- Organization Section -->
 	<div class="card bg-base-100 shadow-sm border border-base-300">
 		<div class="card-body">
@@ -294,4 +298,5 @@
 			</div>
 		</div>
 	</div>
+	{/if}
 </div>
