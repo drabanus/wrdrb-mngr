@@ -303,6 +303,7 @@ export default {
 		reminderLeadDays: 'Reminder lead time (days)',
 		save: 'Save',
 		testEmail: 'Send test email',
+		testSuccess: 'Test email sent successfully!',
 		saved: 'Saved!',
 		orgName: 'Organization name'
 	},

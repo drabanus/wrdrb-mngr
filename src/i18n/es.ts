@@ -303,6 +303,7 @@ export default {
 		reminderLeadDays: 'Anticipación del recordatorio (días)',
 		save: 'Guardar',
 		testEmail: 'Enviar correo de prueba',
+		testSuccess: '¡Correo de prueba enviado con éxito!',
 		saved: '¡Guardado!',
 		orgName: 'Nombre de la organización'
 	},
