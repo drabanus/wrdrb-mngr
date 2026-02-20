@@ -224,6 +224,10 @@ export default {
 	todos: {
 		title: 'Tasks',
 		addTodo: 'Add task',
+		addTask: 'Add task',
+		editTask: 'Edit task',
+		titleField: 'Title',
+		type: 'Type',
 		types: {
 			laundry: 'Laundry',
 			repair: 'Repair',
@@ -231,32 +235,28 @@ export default {
 			size_change: 'Size change',
 			custom: 'Other'
 		},
-		priority: {
-			low: 'Low',
-			normal: 'Normal',
-			high: 'High',
-			urgent: 'Urgent'
-		},
+		priority: 'Priority',
 		priorities: {
 			low: 'Low',
 			normal: 'Normal',
 			high: 'High',
 			urgent: 'Urgent'
 		},
-		status: {
-			open: 'Open',
-			in_progress: 'In progress',
-			done: 'Done'
-		},
+		status: 'Status',
 		statuses: {
 			open: 'Open',
 			in_progress: 'In progress',
 			done: 'Done'
 		},
 		assignTo: 'Assign to',
+		assignedTo: 'Assigned to',
+		unassigned: 'Unassigned',
 		dueDate: 'Due date',
+		description: 'Description',
 		markInProgress: 'In progress',
 		markDone: 'Mark done',
+		confirmDelete: 'Delete task?',
+		confirmDeleteMessage: 'This task will be permanently deleted.',
 		save: 'Save',
 		filter: 'Filter',
 		all: 'All'
@@ -272,8 +272,11 @@ export default {
 	},
 	settings: {
 		title: 'Settings',
+		subtitle: 'Customize your experience',
 		appearance: 'Appearance',
 		colorScheme: 'Color scheme',
+		theme: 'Theme',
+		organization: 'Organization',
 		fontSize: 'Font size',
 		language: 'Language',
 		languages: {
@@ -305,6 +308,7 @@ export default {
 		testEmail: 'Send test email',
 		testSuccess: 'Test email sent successfully!',
 		saved: 'Saved!',
+		saveSuccess: 'Settings saved!',
 		orgName: 'Organization name'
 	},
 	common: {

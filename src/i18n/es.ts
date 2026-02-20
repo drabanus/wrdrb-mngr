@@ -224,6 +224,10 @@ export default {
 	todos: {
 		title: 'Tareas',
 		addTodo: 'Añadir tarea',
+		addTask: 'Añadir tarea',
+		editTask: 'Editar tarea',
+		titleField: 'Título',
+		type: 'Tipo',
 		types: {
 			laundry: 'Lavandería',
 			repair: 'Reparación',
@@ -231,32 +235,28 @@ export default {
 			size_change: 'Cambio de talla',
 			custom: 'Otro'
 		},
-		priority: {
-			low: 'Baja',
-			normal: 'Normal',
-			high: 'Alta',
-			urgent: 'Urgente'
-		},
+		priority: 'Prioridad',
 		priorities: {
 			low: 'Baja',
 			normal: 'Normal',
 			high: 'Alta',
 			urgent: 'Urgente'
 		},
-		status: {
-			open: 'Abierta',
-			in_progress: 'En curso',
-			done: 'Hecha'
-		},
+		status: 'Estado',
 		statuses: {
 			open: 'Abierta',
 			in_progress: 'En curso',
 			done: 'Hecha'
 		},
 		assignTo: 'Asignar a',
+		assignedTo: 'Asignado a',
+		unassigned: 'Sin asignar',
 		dueDate: 'Fecha límite',
+		description: 'Descripción',
 		markInProgress: 'En curso',
 		markDone: 'Marcar como hecha',
+		confirmDelete: '¿Eliminar tarea?',
+		confirmDeleteMessage: 'Esta tarea se eliminará permanentemente.',
 		save: 'Guardar',
 		filter: 'Filtro',
 		all: 'Todas'
@@ -272,8 +272,11 @@ export default {
 	},
 	settings: {
 		title: 'Configuración',
+		subtitle: 'Personaliza tu experiencia',
 		appearance: 'Apariencia',
 		colorScheme: 'Esquema de colores',
+		theme: 'Tema',
+		organization: 'Organización',
 		fontSize: 'Tamaño de fuente',
 		language: 'Idioma',
 		languages: {
@@ -305,6 +308,7 @@ export default {
 		testEmail: 'Enviar correo de prueba',
 		testSuccess: '¡Correo de prueba enviado con éxito!',
 		saved: '¡Guardado!',
+		saveSuccess: '¡Configuración guardada!',
 		orgName: 'Nombre de la organización'
 	},
 	common: {

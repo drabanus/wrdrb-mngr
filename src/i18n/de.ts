@@ -224,6 +224,10 @@ export default {
 	todos: {
 		title: 'Aufgaben',
 		addTodo: 'Aufgabe hinzufügen',
+		addTask: 'Aufgabe hinzufügen',
+		editTask: 'Aufgabe bearbeiten',
+		titleField: 'Titel',
+		type: 'Typ',
 		types: {
 			laundry: 'Wäsche',
 			repair: 'Reparatur',
@@ -231,32 +235,28 @@ export default {
 			size_change: 'Größenwechsel',
 			custom: 'Sonstige'
 		},
-		priority: {
-			low: 'Niedrig',
-			normal: 'Normal',
-			high: 'Hoch',
-			urgent: 'Dringend'
-		},
+		priority: 'Priorität',
 		priorities: {
 			low: 'Niedrig',
 			normal: 'Normal',
 			high: 'Hoch',
 			urgent: 'Dringend'
 		},
-		status: {
-			open: 'Offen',
-			in_progress: 'In Bearbeitung',
-			done: 'Erledigt'
-		},
+		status: 'Status',
 		statuses: {
 			open: 'Offen',
 			in_progress: 'In Bearbeitung',
 			done: 'Erledigt'
 		},
 		assignTo: 'Zuweisen an',
+		assignedTo: 'Zugewiesen an',
+		unassigned: 'Nicht zugewiesen',
 		dueDate: 'Fällig am',
+		description: 'Beschreibung',
 		markInProgress: 'In Bearbeitung',
 		markDone: 'Erledigt',
+		confirmDelete: 'Aufgabe löschen?',
+		confirmDeleteMessage: 'Diese Aufgabe wird unwiderruflich gelöscht.',
 		save: 'Speichern',
 		filter: 'Filter',
 		all: 'Alle'
@@ -272,8 +272,11 @@ export default {
 	},
 	settings: {
 		title: 'Einstellungen',
+		subtitle: 'Passe deine Einstellungen an',
 		appearance: 'Darstellung',
 		colorScheme: 'Farbschema',
+		theme: 'Farbschema',
+		organization: 'Organisation',
 		fontSize: 'Schriftgröße',
 		language: 'Sprache',
 		languages: {
@@ -305,6 +308,7 @@ export default {
 		testEmail: 'Test-E-Mail senden',
 		testSuccess: 'Test-E-Mail erfolgreich gesendet!',
 		saved: 'Gespeichert!',
+		saveSuccess: 'Einstellungen gespeichert!',
 		orgName: 'Organisationsname'
 	},
 	common: {
