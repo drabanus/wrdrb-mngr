@@ -237,13 +237,25 @@ export default {
 			high: 'Hoch',
 			urgent: 'Dringend'
 		},
+		priorities: {
+			low: 'Niedrig',
+			normal: 'Normal',
+			high: 'Hoch',
+			urgent: 'Dringend'
+		},
 		status: {
+			open: 'Offen',
+			in_progress: 'In Bearbeitung',
+			done: 'Erledigt'
+		},
+		statuses: {
 			open: 'Offen',
 			in_progress: 'In Bearbeitung',
 			done: 'Erledigt'
 		},
 		assignTo: 'Zuweisen an',
 		dueDate: 'Fällig am',
+		markInProgress: 'In Bearbeitung',
 		markDone: 'Erledigt',
 		save: 'Speichern',
 		filter: 'Filter',
