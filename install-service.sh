@@ -48,6 +48,7 @@ fi
 # ── Determine the service user ──────────────────────────────
 # Prefer SUDO_USER (the user who invoked sudo); fall back to owner of APP_DIR
 SERVICE_USER="${SUDO_USER:-$(stat -c '%U' "$APP_DIR")}"
+SERVICE_HOME=$(eval echo "~${SERVICE_USER}")
 info "Service will run as user: ${SERVICE_USER}"
 
 # ── Read port & origin from .env (if present) ───────────────
@@ -77,6 +78,8 @@ RestartSec=5
 Environment=NODE_ENV=production
 Environment=PORT=${PORT}
 Environment=ORIGIN=${ORIGIN}
+Environment=HOME=${SERVICE_HOME}
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${SERVICE_HOME}/.local/share/fnm/aliases/default/bin:${SERVICE_HOME}/.fnm/aliases/default/bin
 
 # Hardening
 NoNewPrivileges=true
