@@ -54,7 +54,12 @@ export const actions: Actions = {
 
 	logout: async ({ locals, cookies }) => {
 		if (locals.session) {
-			await lucia.invalidateSession(locals.session.id);
+			try {
+				await lucia.invalidateSession(locals.session.id);
+			} catch {
+				// Fallback: delete via Prisma if Lucia's adapter fails
+				await prisma.session.deleteMany({ where: { id: locals.session.id } }).catch(() => {});
+			}
 		}
 
 		const sessionCookie = lucia.createBlankSessionCookie();
